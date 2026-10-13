@@ -15,10 +15,13 @@ const PUBLIC_LINKS = [
   { href: "/contact", label: "Contact" },
 ];
 
+const MEAL_PLANS_LINK = { href: "/meal-plans", label: "Meal Plans" };
+
 const MEMBER_LINKS = [
   { href: "/upload", label: "Share a recipe" },
   { href: "/my-recipes", label: "My recipes" },
   { href: "/bookmarks", label: "Saved recipes" },
+  MEAL_PLANS_LINK,
   { href: "/profile", label: "Profile" },
 ];
 
@@ -29,6 +32,9 @@ const MEMBER_LINKS = [
 export async function Navbar() {
   const { user, profile } = await getCurrentUserWithProfile();
 
+  // Meal plans are private, so the link only appears once you are logged in.
+  const desktopLinks = user ? [...PUBLIC_LINKS, MEAL_PLANS_LINK] : PUBLIC_LINKS;
+
   return (
     <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -36,7 +42,7 @@ export async function Navbar() {
 
         <nav aria-label="Main" className="hidden md:block">
           <ul className="flex items-center gap-1">
-            {PUBLIC_LINKS.map((link) => (
+            {desktopLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}

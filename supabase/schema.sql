@@ -446,6 +446,60 @@ create policy "Users can delete their own comments"
   using ((select auth.uid()) = user_id);
 
 -- ============================================================================
+--  MEAL PLANS
+--
+--  Each row puts one recipe on one day for breakfast, lunch or dinner.
+--  Plans are private: every policy below limits a user to their own rows.
+-- ============================================================================
+
+create table if not exists public.meal_plans (
+  id           uuid primary key default gen_random_uuid(),
+  user_id      uuid not null references public.profiles (id) on delete cascade,
+  -- A deleted recipe takes its planned meals with it.
+  recipe_id    uuid not null references public.recipes (id) on delete cascade,
+  planned_date date not null,
+  meal_type    text not null,
+  created_at   timestamptz not null default now(),
+  updated_at   timestamptz not null default now(),
+  constraint meal_plans_meal_type check (meal_type in ('breakfast', 'lunch', 'dinner'))
+);
+
+create index if not exists meal_plans_user_date_idx on public.meal_plans (user_id, planned_date);
+create index if not exists meal_plans_recipe_id_idx on public.meal_plans (recipe_id);
+
+drop trigger if exists meal_plans_set_updated_at on public.meal_plans;
+create trigger meal_plans_set_updated_at
+  before update on public.meal_plans
+  for each row execute function public.set_updated_at();
+
+alter table public.meal_plans enable row level security;
+
+drop policy if exists "Users can read their own meal plans" on public.meal_plans;
+create policy "Users can read their own meal plans"
+  on public.meal_plans for select
+  to authenticated
+  using ((select auth.uid()) = user_id);
+
+drop policy if exists "Users can add their own meal plans" on public.meal_plans;
+create policy "Users can add their own meal plans"
+  on public.meal_plans for insert
+  to authenticated
+  with check ((select auth.uid()) = user_id);
+
+drop policy if exists "Users can update their own meal plans" on public.meal_plans;
+create policy "Users can update their own meal plans"
+  on public.meal_plans for update
+  to authenticated
+  using ((select auth.uid()) = user_id)
+  with check ((select auth.uid()) = user_id);
+
+drop policy if exists "Users can delete their own meal plans" on public.meal_plans;
+create policy "Users can delete their own meal plans"
+  on public.meal_plans for delete
+  to authenticated
+  using ((select auth.uid()) = user_id);
+
+-- ============================================================================
 --  STORAGE
 --
 --  Files live at  <bucket>/<user-id>/<filename>  so ownership is derived from

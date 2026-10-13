@@ -7,7 +7,7 @@ import { supabaseAnonKey, supabaseUrl } from "@/lib/supabase/env";
 import { timeoutFetch } from "@/lib/supabase/fetch";
 
 /** Routes that require an authenticated user. */
-const PROTECTED_PREFIXES = ["/upload", "/my-recipes", "/bookmarks", "/profile"];
+const PROTECTED_PREFIXES = ["/upload", "/my-recipes", "/bookmarks", "/profile", "/meal-plans"];
 
 /** Routes an already-authenticated user should not see. */
 const AUTH_ONLY_PREFIXES = ["/login", "/register"];
