@@ -28,10 +28,13 @@ export function SectionHeading({
       {href ? (
         <Link
           href={href}
-          className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+          className="group inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
         >
           {linkLabel}
-          <ArrowRight className="size-4" aria-hidden="true" />
+          <ArrowRight
+            className="size-4 transition-transform group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
         </Link>
       ) : null}
     </div>

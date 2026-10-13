@@ -7,12 +7,15 @@ type RecipeGridProps = {
   className?: string;
   /** Number of cards given image priority, for above-the-fold LCP. */
   priorityCount?: number;
+  /** Fade each card in as it scrolls into view. */
+  reveal?: boolean;
 };
 
 export function RecipeGrid({
   recipes,
   className,
   priorityCount = 0,
+  reveal = false,
 }: RecipeGridProps) {
   return (
     <div
@@ -22,11 +25,11 @@ export function RecipeGrid({
       )}
     >
       {recipes.map((recipe, index) => (
-        <RecipeCard
-          key={recipe.id}
-          recipe={recipe}
-          priority={index < priorityCount}
-        />
+        // The wrapper carries the animation so it can't fight the card's own
+        // hover transform.
+        <div key={recipe.id} className={cn("grid", reveal && "reveal")}>
+          <RecipeCard recipe={recipe} priority={index < priorityCount} />
+        </div>
       ))}
     </div>
   );

@@ -100,6 +100,63 @@
   --ring: oklch(0.705 0.175 45);
 }
 
+@theme {
+  --animate-float: float 3.5s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+}
+
+@keyframes welcome-out {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+
+@keyframes welcome-fade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes steam {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scaleY(0.6);
+  }
+  35% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px) scaleY(1);
+  }
+}
+
+html[data-welcome-seen] #welcome-splash {
+  display: none;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -127,6 +184,17 @@
     background-image:
       radial-gradient(ellipse 80% 55% at 12% -10%, oklch(0.42 0.07 55 / 0.55), transparent 60%),
       radial-gradient(ellipse 70% 50% at 92% 8%, oklch(0.38 0.06 28 / 0.45), transparent 62%);
+  }
+  /* Fades content up as it scrolls into view. Pure CSS, so browsers without
+     scroll-driven animations (and reduced-motion users) just see it static. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+      }
+    }
   }
   .line-clamp-2-safe {
     display: -webkit-box;

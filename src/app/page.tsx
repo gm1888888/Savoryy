@@ -41,7 +41,7 @@ export default async function HomePage() {
         {/* ---------------------------------------------- Latest recipes */}
         {!failed ? (
           <section aria-labelledby="latest-heading">
-            <div id="latest-heading">
+            <div id="latest-heading" className="reveal">
               <SectionHeading
                 title="Latest recipes"
                 description="Freshly added by the community."
@@ -50,9 +50,10 @@ export default async function HomePage() {
             </div>
 
             {hasAnyRecipes ? (
-              <RecipeGrid recipes={latest.recipes} priorityCount={3} />
+              <RecipeGrid recipes={latest.recipes} priorityCount={3} reveal />
             ) : (
               <EmptyState
+                className="reveal"
                 icon={<UtensilsCrossed className="size-6" aria-hidden="true" />}
                 title="No recipes have been shared yet"
                 description="This kitchen is waiting for its first dish. Be the first person to share a recipe and get things started."
@@ -66,7 +67,7 @@ export default async function HomePage() {
         {/* --------------------------------------------- Popular recipes */}
         {!failed && hasAnyRecipes ? (
           <section aria-labelledby="popular-heading">
-            <div id="popular-heading">
+            <div id="popular-heading" className="reveal">
               <SectionHeading
                 title="Popular recipes"
                 description="The most liked dishes on the site."
@@ -75,9 +76,10 @@ export default async function HomePage() {
             </div>
 
             {popularRecipes.length > 0 ? (
-              <RecipeGrid recipes={popularRecipes} />
+              <RecipeGrid recipes={popularRecipes} reveal />
             ) : (
               <EmptyState
+                className="reveal"
                 icon={<Sparkles className="size-6" aria-hidden="true" />}
                 title="Nothing has been liked yet"
                 description="Once people start liking recipes, the favourites will rise to the top and appear here."
@@ -90,7 +92,7 @@ export default async function HomePage() {
         {/* -------------------------------------------- Trending recipes */}
         {!failed && hasAnyRecipes ? (
           <section aria-labelledby="trending-heading">
-            <div id="trending-heading">
+            <div id="trending-heading" className="reveal">
               <SectionHeading
                 title="Trending now"
                 description="Other dishes people are enjoying."
@@ -98,9 +100,10 @@ export default async function HomePage() {
             </div>
 
             {trendingRecipes.length > 0 ? (
-              <RecipeGrid recipes={trendingRecipes} />
+              <RecipeGrid recipes={trendingRecipes} reveal />
             ) : (
               <EmptyState
+                className="reveal"
                 icon={<Flame className="size-6" aria-hidden="true" />}
                 title="Not enough activity yet"
                 description="Trending needs a few more recipes and a few more likes before it can show anything meaningful."
@@ -112,7 +115,7 @@ export default async function HomePage() {
 
         {/* -------------------------------------------------- Categories */}
         <section aria-labelledby="categories-heading">
-          <div id="categories-heading">
+          <div id="categories-heading" className="reveal">
             <SectionHeading
               title="Browse by category"
               description="Find something for the meal you are planning."
@@ -124,7 +127,7 @@ export default async function HomePage() {
             {CATEGORIES.map((category) => {
               const count = categoryCounts[category] ?? 0;
               return (
-                <li key={category}>
+                <li key={category} className="reveal">
                   <Link
                     href={"/categories/" + categoryToSlug(category)}
                     className="flex h-full flex-col justify-between gap-2 rounded-xl border border-border bg-card p-4 transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-sm"
@@ -145,9 +148,12 @@ export default async function HomePage() {
         </section>
 
         {/* -------------------------------------------- Call to action */}
-        <section className="overflow-hidden rounded-3xl border border-border bg-warm-wash px-6 py-12 text-center sm:px-12 sm:py-16">
+        <section className="reveal group overflow-hidden rounded-3xl border border-border bg-warm-wash px-6 py-12 text-center sm:px-12 sm:py-16">
           <div className="mx-auto mb-5 flex size-14 items-center justify-center rounded-full bg-background text-primary shadow-sm ring-1 ring-border/60">
-            <ChefHat className="size-6" aria-hidden="true" />
+            <ChefHat
+              className="size-6 transition-transform duration-300 group-hover:-rotate-12"
+              aria-hidden="true"
+            />
           </div>
           <h2 className="text-balance font-heading text-2xl font-bold sm:text-3xl">
             Got a recipe worth passing on?
