@@ -35,9 +35,6 @@ const COLORS = {
   leaf: "#5fa043",
 };
 
-// Only wide screens get the dishes, so phones never download three.js.
-const MIN_WIDTH_QUERY = "(min-width: 1280px)";
-
 type Kit = {
   THREE: Three;
   toon: (color: string, extra?: ToonParams) => import("three").MeshToonMaterial;
@@ -65,7 +62,7 @@ export function Dish3D({
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount || !window.matchMedia(MIN_WIDTH_QUERY).matches) return;
+    if (!mount) return;
 
     let cancelled = false;
     let teardown = () => {};
@@ -85,7 +82,9 @@ function buildScene(THREE: Three, mount: HTMLDivElement, dish: DishKind, spin: n
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // Phones get a lower cap: they run two of these at once on a small GPU.
+  const smallScreen = window.matchMedia("(max-width: 767px)").matches;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, smallScreen ? 1.5 : 2));
   mount.appendChild(renderer.domElement);
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height = "100%";

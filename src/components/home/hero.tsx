@@ -14,14 +14,16 @@ const rise =
 export function Hero({ recipeCount }: { recipeCount: number }) {
   return (
     <section className="relative overflow-hidden border-b border-border bg-warm-wash">
+      {/* Below xl the dishes become a faded background, half off-screen on
+          opposite corners so they never sit behind the same line of text. */}
       <Dish3D
         dish="pancakes"
         spin={-1}
-        className="pointer-events-none absolute -left-12 top-1/2 hidden size-[26rem] -translate-y-1/2 xl:block 2xl:left-[6%] 2xl:size-[32rem]"
+        className="pointer-events-none absolute -left-28 -top-6 size-64 opacity-40 sm:-left-32 sm:size-80 xl:-left-12 xl:top-1/2 xl:size-[26rem] xl:-translate-y-1/2 xl:opacity-100 2xl:left-[6%] 2xl:size-[32rem]"
       />
       <Dish3D
         dish="ramen"
-        className="pointer-events-none absolute -right-12 top-1/2 hidden size-[26rem] -translate-y-1/2 xl:block 2xl:right-[6%] 2xl:size-[32rem]"
+        className="pointer-events-none absolute -bottom-10 -right-28 size-64 opacity-40 sm:-right-32 sm:size-80 xl:bottom-auto xl:-right-12 xl:top-1/2 xl:size-[26rem] xl:-translate-y-1/2 xl:opacity-100 2xl:right-[6%] 2xl:size-[32rem]"
       />
 
       <div className="relative z-10 mx-auto w-full max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-24">
