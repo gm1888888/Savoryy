@@ -237,8 +237,10 @@ export function MealPlanManager({ plans: initialPlans, recipeOptions }: Props) {
                         )}
                       </div>
 
+                      {/* On phones the actions drop to their own row so the
+                          recipe title isn't squeezed to a few letters. */}
                       {confirmingId === plan.id ? (
-                        <div className="flex items-center gap-2">
+                        <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
                           <span className="text-sm text-muted-foreground">
                             Remove?
                           </span>
@@ -260,7 +262,7 @@ export function MealPlanManager({ plans: initialPlans, recipeOptions }: Props) {
                           </Button>
                         </div>
                       ) : (
-                        <div className="flex items-center gap-1">
+                        <div className="flex w-full items-center justify-end gap-1 sm:w-auto">
                           <Button
                             size="sm"
                             variant="ghost"
