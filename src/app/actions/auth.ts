@@ -46,6 +46,12 @@ function friendlyAuthError(message: string): string {
   if (message.toLowerCase().includes("already registered")) {
     return "That email is already registered. Try logging in instead.";
   }
+  if (
+    message.toLowerCase().includes("rate limit") ||
+    message.toLowerCase().includes("security purposes")
+  ) {
+    return "Too many confirmation emails were sent just now. Please wait a minute and try again.";
+  }
   if (message.toLowerCase().includes("password")) {
     // Supabase's own password-strength messages are already user-safe.
     return message;
@@ -84,6 +90,14 @@ export async function registerAction(
 
   if (error) {
     return { message: friendlyAuthError(error.message) };
+  }
+
+  // An email that is already registered and confirmed (including accounts
+  // made with Google) does not error: Supabase returns a fake user with no
+  // identities and sends no email. Without this check the visitor would be
+  // told to wait for a confirmation email that never comes.
+  if (data.user && data.user.identities?.length === 0) {
+    return { message: friendlyAuthError("already registered") };
   }
 
   // With email confirmation enabled Supabase returns a user but no session.
